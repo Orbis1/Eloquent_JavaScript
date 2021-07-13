@@ -1,0 +1,48 @@
+<!doctype html>
+
+<h1>Mountains</h1>
+
+<div id="mountains"></div>
+
+<script>
+  const MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+    {name: "Everest", height: 8848, place: "Nepal"},
+    {name: "Mount Fuji", height: 3776, place: "Japan"},
+    {name: "Vaalserberg", height: 323, place: "Netherlands"},
+    {name: "Denali", height: 6168, place: "United States"},
+    {name: "Popocatepetl", height: 5465, place: "Mexico"},
+    {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+  ];
+
+  // Your code here
+const header = {};
+for (key of Object.keys(MOUNTAINS[0])) {
+    header[key] = key;
+}
+let table = [header, ...MOUNTAINS];
+
+function wrapper(tag, body) {
+    return `<${tag}>${body}</${tag}>`;
+};
+  
+function wrapperS(tag, body, style) {
+    return `<${tag} style="${style}">${body}</${tag}>`;
+};
+
+table = table.map((top, index) => {
+    const tag = index == 0 ? 'th' : 'td';
+  	const numStyle = 'text-align: right';
+    return wrapper(tag, top.name) + wrapperS(tag, top.height, numStyle) + wrapper(tag, top.place)
+})
+.map(item => wrapper('tr',item))
+.join('');
+  
+const div = document.querySelector('#mountains')
+const element = document.createElement('table');
+element.innerHTML = table;
+div.appendChild(element);
+
+
+  
+</script>

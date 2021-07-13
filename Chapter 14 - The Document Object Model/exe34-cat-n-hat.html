@@ -1,0 +1,50 @@
+<!doctype html>
+
+<style>body { min-height: 200px }</style>
+<div id="cat" style="position: absolute"></div>
+<div id="hat" style="position: absolute"></div>
+<div id="bird" style="position: absolute"></div>
+<div id="sun" style="position: absolute">sun</div>
+
+<script>
+  let cat = document.querySelector("#cat");
+  let hat = document.querySelector("#hat");
+  let bird = document.querySelector("#bird");
+  let sun = document.querySelector("#sun");
+
+  let center = {x: 500, y: 250};
+  let mars = {distance: 40, speed: 0.000808725};
+
+  sun.style.top = center.y + "px";
+  sun.style.left = center.x + "px";
+
+  let angle = 0;
+  let angle2 = 0;
+  let lastTime = null;
+  function animate(time) {
+    if (lastTime != null) {
+        angle += (time - lastTime) * 0.001;
+        angle2 += (time - lastTime) * mars.speed;
+    };
+    lastTime = time;
+    let y = Math.sin(angle), x = Math.cos(angle);
+    
+    let catY = y * 200 + center.y, catX = x * 200 + center.x;
+    cat.style.top = catY + "px";
+    cat.style.left = catX + "px";
+    cat.innerHTML = `cat`;
+
+    hat.style.top = (Math.sin(angle2) * mars.distance + center.y) + "px";
+    hat.style.left = (Math.cos(angle2) * mars.distance + center.x) + "px";
+    hat.innerHTML = `hat`;
+    
+    bird.style.top = (Math.sin(angle2) * 50 + catY) + "px";
+    bird.style.left = (Math.cos(angle2)  * 50 + catX) + "px";
+    bird.innerHTML = `bird`;
+
+    // Your extensions here.
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+</script>
