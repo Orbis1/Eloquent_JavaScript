@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<style>
+    .trail {
+        /* className for the trail elements */
+        position: absolute;
+        height: 6px;
+        width: 6px;
+        border-radius: 3px;
+        background: teal;
+    }
+    body {
+        height: 300px;
+    }
+</style>
+
+<script>
+    let dots = [];
+    let current = 0;
+
+    function createTrail(count) {
+        for (let i = 0; i < count; i++) {
+            const dot = document.createElement("div");
+            dot.className = "trail";
+            dot.style.left = "0px";
+            dot.style.top = "0px";
+            const body = document.querySelector("body");
+            dots.push(dot);
+            body.appendChild(dot);
+        }
+    }
+
+    let mouse;
+    let dot = dots[current];
+
+    function mouseMove(event) {
+        const { pageX, pageY } = event;
+        mouse = { x: pageX, y: pageY };
+        dot = dots[current];
+        // simpleAnimate();
+        let start = performance.now();
+        animate({timing: linear, draw, duration: 5000, start})
+    }
+
+    function simpleAnimate() {
+        dot.style.left = mouse.x + "px";
+        dot.style.top = mouse.y + "px";
+    }
+
+    function animate({ timing, draw, duration, start }) {
+        
+
+        requestAnimationFrame(function animate(time) {
+            // timeFraction изменяется от 0 до 1
+            let timeFraction = (time - start) / duration;
+            console.log({time, start })
+            if (timeFraction > 1) timeFraction = 1;
+
+            // вычисление текущего состояния анимации
+            let progress = timing(timeFraction);
+
+            draw(progress); // отрисовать её
+
+            if (timeFraction < 1) {
+                requestAnimationFrame(animate);
+            }
+        });
+    }
+
+    function draw(progress) {
+        // --> dot, mouse
+        if (!dot) return;
+        const rect = dot.getBoundingClientRect();
+        const position = { x: rect.left, y: rect.top };
+        if (position.y <= mouse.y) {
+            dot.style.top = position.y + (mouse.y - position.y) * progress + "px";
+        } else {
+            dot.style.top = position.y - (position.y - mouse.y) * progress + "px";
+        }
+
+        if (position.x <= mouse.x) {
+            dot.style.left = position.x + (mouse.x - position.x) * progress + "px";
+        } else {
+            dot.style.left = position.x - (position.x - mouse.x) * progress + "px";
+        }
+    }
+
+    function linear(timeFraction) {
+        return timeFraction;
+    }
+
+    window.addEventListener("load", () => {
+        createTrail(24);
+    });
+    window.addEventListener("mousemove", mouseMove);
+    animate({timing: linear, draw, duration: 10000})
+</script>

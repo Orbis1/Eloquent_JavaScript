@@ -1,0 +1,33 @@
+<p>🎈</p>
+
+<script>
+    function boom() {
+        balloon.innerHTML = "💥";
+        document.removeEventListener("keydown", changeSize);
+    }
+
+    function changeSize(event) {
+        event.preventDefault();
+        const { key } = event;
+        const style = window.getComputedStyle(balloon, null).getPropertyValue("font-size");
+        const fontSize = parseFloat(style);
+        const size = balloon.style.fontSize;
+        const MAX_SIZE = 100;
+        let newSize;
+        switch (key) {
+            case "ArrowUp":
+                newSize = fontSize * 1.1;
+                break;
+            case "ArrowDown":
+                newSize = fontSize * 0.9;
+                break;
+            default:
+                break;
+        }
+        if (newSize > MAX_SIZE) boom();
+        else balloon.style.fontSize = newSize;
+    }
+
+    const balloon = document.querySelector("p");
+    document.addEventListener("keydown", changeSize);
+</script>
